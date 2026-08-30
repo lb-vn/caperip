@@ -1,0 +1,100 @@
+{
+  "cape": {
+    "name": "Cape",
+    "slug": "cape",
+    "pricePerLine": [70, 70, 70, 70, 70],
+    "taxesIncluded": true,
+    "features": [
+      "IMSI rotation",
+      "SIM swap protection",
+      "SS7 lock",
+      "Private payment",
+      "2 free secondary numbers",
+      "50+ country roaming"
+    ],
+    "network": "T-Mobile and AT&T",
+    "dataNote": "Unlimited (may slow after 50GB)",
+    "source": "https://cape.co"
+  },
+  "att": {
+    "name": "AT&T Value Plus",
+    "slug": "att",
+    "pricePerLine": [50, 45, 35, 30, 30],
+    "taxesIncluded": false,
+    "features": ["5GB priority data", "3GB hotspot", "Nationwide 5G"],
+    "network": "AT&T",
+    "dataNote": "Unlimited (5GB priority, then deprioritized)",
+    "source": "https://www.att.com/plans/wireless/"
+  },
+  "tmobile": {
+    "name": "T-Mobile Essentials",
+    "slug": "tmobile",
+    "pricePerLine": [65, 50, 40, 35, 32],
+    "taxesIncluded": false,
+    "features": ["50GB premium data", "Nationwide 5G"],
+    "network": "T-Mobile",
+    "dataNote": "50GB before deprioritization",
+    "source": "https://www.t-mobile.com/cell-phone-plans"
+  },
+  "verizon": {
+    "name": "Verizon Unlimited Plus",
+    "slug": "verizon",
+    "pricePerLine": [80, 70, 55, 45, 45],
+    "taxesIncluded": false,
+    "features": ["30GB hotspot", "5G Ultra Wideband", "3-year price lock"],
+    "network": "Verizon",
+    "dataNote": "Unlimited premium data",
+    "source": "https://www.verizon.com/plans/unlimited/"
+  },
+  "usmobile": {
+    "name": "US Mobile Premium",
+    "slug": "usmobile",
+    "pricePerLine": [33, 33, 33, 33, 33],
+    "taxesIncluded": false,
+    "features": [
+      "Unlimited priority data",
+      "Unlimited hotspot",
+      "20GB international data"
+    ],
+    "network": "T-Mobile / Verizon / AT&T",
+    "dataNote": "Unlimited priority data",
+    "source": "https://www.usmobile.com/plans"
+  },
+  "mint": {
+    "name": "Mint Mobile Unlimited",
+    "slug": "mint",
+    "pricePerLine": [30, 30, 30, 30, 30],
+    "taxesIncluded": false,
+    "features": ["20GB hotspot", "Free calls to Canada & Mexico"],
+    "network": "T-Mobile",
+    "dataNote": "Unlimited (may slow after 35GB)",
+    "source": "https://www.mintmobile.com"
+  },
+  "visible": {
+    "name": "Visible+",
+    "slug": "visible",
+    "pricePerLine": [35, 35, 35, 35, 35],
+    "taxesIncluded": true,
+    "features": [
+      "Unlimited premium data",
+      "International coverage in 140+ countries"
+    ],
+    "network": "Verizon",
+    "dataNote": "Unlimited premium data on 5G Ultra Wideband",
+    "source": "https://www.visible.com"
+  },
+  "googlefi": {
+    "name": "Google Fi Unlimited Premium",
+    "slug": "googlefi",
+    "pricePerLine": [65, 55, 45, 40, 40],
+    "taxesIncluded": true,
+    "features": [
+      "100GB high-speed data",
+      "50GB hotspot",
+      "International data in 200+ countries"
+    ],
+    "network": "T-Mobile",
+    "dataNote": "100GB before throttle",
+    "source": "https://fi.google.com/about/plans"
+  }
+}

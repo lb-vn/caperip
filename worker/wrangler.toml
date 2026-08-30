@@ -1,0 +1,7 @@
+name = "cape-speedtest"
+main = "src/index.ts"
+compatibility_date = "2025-05-01"
+
+[vars]
+CAPE_ASNS = "400928"
+ALLOWED_ORIGINS = "https://cape.rip,http://localhost:5173"

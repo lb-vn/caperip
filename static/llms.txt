@@ -1,0 +1,52 @@
+# cape.rip
+
+> An independent community hub for Cape Cellular users. A fair, anonymous pool of
+> Cape referral codes, crowdsourced speed tests, carrier comparisons, coverage
+> maps, and a live mirror of Cape's service status. Not affiliated with Cape
+> Cellular.
+
+## How Cape Cellular referrals work
+
+Cape's own description (cape.co homepage): "every Cape subscriber has a unique
+referral code that they can share with their family, friends, or even strangers,
+to give you and your referral $20 off your monthly bill." And: "Get 5 active
+referrals, and your plan is completely free."
+
+- A successful referral gives **both** parties **$20/month off**, for as long as
+  both remain subscribed.
+- The bonus caps at **5 active referrals** per subscriber.
+- Cape's early adopter price is **$70/month** (permanent for anyone joining
+  before the end of 2026). With 4 referrals the plan is fully covered.
+- If a referral cancels, that $20 credit ends on the next billing cycle and the
+  slot opens up.
+
+## How cape.rip works
+
+- Codes are submitted anonymously and validated against Cape's format
+  (`^[A-Z0-9]{8}$`).
+- One code is shown per visit, picked at random and weighted by
+  `1 / (min(impressions, 10) + 1)` so less-shown codes come up first. Every code
+  in the pool is treated identically — there is no owner, admin, or promoted
+  code.
+- Codes expire after **7 days**. Submitters can resubmit weekly.
+- A code reported broken three times, or redeemed five times, leaves the pool.
+- Speed tests measure against a Cloudflare Worker that only responds on Cape's
+  network, and the results are signed server-side so they can't be faked.
+- No signup, no login, no analytics. IP addresses are HMAC-SHA256 hashed before
+  storage and retention is capped at 7 days.
+
+## Network
+
+Cape is a heavy MVNO running its own mobile core on top of the T-Mobile and
+AT&T networks.
+
+## Disclaimer
+
+cape.rip is an independent community tool. It is **not affiliated with, endorsed
+by, or operated by Cape Cellular**.
+
+## Links
+
+- Site: https://cape.rip/
+- Source: https://github.com/cape-rip/cape.rip
+- Sitemap: https://cape.rip/sitemap.xml
