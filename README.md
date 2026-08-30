@@ -9,7 +9,7 @@ Not affiliated with, endorsed by, or operated by Cape Cellular.
 - **Codes** — anyone can submit their referral code to a shared pool. Visitors see one at a time, picked at random and weighted by how often each has been shown, so less-seen codes come up first. Every code expires after 7 days.
 - **Speeds** — runs a real download/upload/latency test against a Cloudflare Worker that only answers requests originating on Cape's network. Results are signed by the worker so the browser can't fabricate numbers.
 - **Compare** — pricing and feature comparison against the major US carriers.
-- **Status** — mirrors Cape's PagerDuty status page. A snapshot refreshes on a timer in the background, so pages are served from cache.
+- **Status** — mirrors Cape's PagerDuty status page. A snapshot refreshes on a timer in the background, so pages never wait on the upstream.
 - **About** — a plain-English rundown of what Cape is, what it costs, and what the privacy features actually do.
 
 ## Stack
