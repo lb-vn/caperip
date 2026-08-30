@@ -5,12 +5,9 @@
   import { capeUrl } from "$lib/track";
   import { useTurnstile } from "$lib/turnstile.svelte";
   import SpeedMap from "$lib/components/SpeedMap.svelte";
-  import { coverageMapUrl } from "$lib/coverage-map";
   import { CODE_LENGTH, CODE_PATTERN } from "$lib/validation";
 
   let { data }: { data: PageData } = $props();
-
-  const mapUrl = coverageMapUrl(3.2);
 
   const siteKey = untrack(() => data.turnstileSiteKey);
 
@@ -281,47 +278,31 @@
         {/if}
       </div>
 
-      <div class="lg:w-2/5 bg-card rounded-md flex flex-col overflow-hidden">
-        <div class="px-5 pt-5 pb-3">
-          <h2 class="text-xs uppercase tracking-[0.2em] text-white/40">
-            Coverage checker
-          </h2>
-          <p class="text-xs text-white/50 mt-2 leading-relaxed">
-            Cape runs on T-Mobile and AT&T.
-            <a
-              href="/about"
-              class="text-lavender hover:text-lavender-bright transition-colors"
-              >More on how Cape works &rarr;</a
-            >
-          </p>
-        </div>
-        <a
-          href={capeUrl("/coverage", "home_coverage")}
-          target="_blank"
-          rel="noopener noreferrer"
-          class="relative block flex-1 min-h-[240px] overflow-hidden group"
-        >
-          {#if mapUrl}
-            <iframe
-              src={mapUrl}
-              title="Cape coverage preview"
-              class="absolute inset-0 w-full h-full border-0 pointer-events-none"
-              style="filter: invert(1) hue-rotate(180deg);"
-              loading="lazy"
-              tabindex="-1"
-              aria-hidden="true"
-            ></iframe>
-          {/if}
-          <div
-            class="absolute inset-0 bg-black/20 group-hover:bg-black/5 transition-colors flex items-end justify-center pb-4"
+      <div class="lg:w-2/5 bg-card rounded-md p-5 flex flex-col">
+        <h2 class="text-xs uppercase tracking-[0.2em] text-white/40">
+          Coverage
+        </h2>
+        <p class="text-sm text-white/60 mt-3 leading-relaxed">
+          Cape runs on T-Mobile and AT&T, so coverage is the two footprints
+          combined. If you get decent service from either today, you will on
+          Cape.
+        </p>
+        <div class="mt-auto pt-6 flex flex-wrap gap-3">
+          <a
+            href={capeUrl("/coverage", "home_coverage")}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="px-5 py-2.5 bg-lavender text-black text-sm font-semibold rounded hover:bg-lavender-bright transition-colors"
           >
-            <span
-              class="px-5 py-2.5 bg-lavender text-black text-sm font-semibold rounded group-hover:brightness-110 transition-all"
-            >
-              Open coverage map &rarr;
-            </span>
-          </div>
-        </a>
+            Check your area &rarr;
+          </a>
+          <a
+            href="/about"
+            class="px-5 py-2.5 border border-white/20 text-sm font-medium rounded text-white/80 hover:bg-white/5 transition-colors"
+          >
+            How Cape works
+          </a>
+        </div>
       </div>
     </div>
   </section>
