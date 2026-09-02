@@ -1,9 +1,8 @@
 # cape.rip
 
 > An independent community hub for Cape Cellular users. A fair, anonymous pool of
-> Cape referral codes, crowdsourced speed tests, carrier comparisons, coverage
-> maps, and a live mirror of Cape's service status. Not affiliated with Cape
-> Cellular.
+> Cape referral codes, crowdsourced speed tests, carrier comparisons, and a live
+> mirror of Cape's service status. Not affiliated with Cape Cellular.
 
 ## How Cape Cellular referrals work
 
@@ -48,5 +47,5 @@ by, or operated by Cape Cellular**.
 ## Links
 
 - Site: https://cape.rip/
-- Source: https://github.com/cape-rip/cape.rip
+- Source: https://github.com/lb-vn/caperip
 - Sitemap: https://cape.rip/sitemap.xml
