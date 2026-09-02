@@ -1,4 +1,4 @@
-import { and, eq, lt, or, sql } from "drizzle-orm";
+import { and, eq, lt, sql } from "drizzle-orm";
 import { db } from "./db";
 import { codes } from "./db/schema";
 import type { Code } from "./db/schema";
@@ -6,8 +6,8 @@ import type { Code } from "./db/schema";
 const ACTIVE = and(eq(codes.status, "active"), sql`${codes.expiresAt} > now()`);
 
 const IMPRESSION_CAP = 10;
-const MAX_REPORTS = 3;
-const MAX_CLAIMS = 5;
+const REPORT_CAP = 10;
+const CLAIM_CAP = 5;
 
 export async function pickCode(excludeId?: number): Promise<Code | null> {
   const rows = await db
@@ -19,7 +19,10 @@ export async function pickCode(excludeId?: number): Promise<Code | null> {
         : and(ACTIVE, sql`${codes.id} <> ${excludeId}`),
     )
     .orderBy(
-      sql`-ln(random()) * (LEAST(${codes.impressions}, ${IMPRESSION_CAP}) + 1)`,
+      sql`-ln(random())
+        * (LEAST(${codes.impressions}, ${IMPRESSION_CAP}) + 1)
+        * (LEAST(${codes.reportCount}, ${REPORT_CAP}) + 1)
+        * (LEAST(${codes.claimedCount}, ${CLAIM_CAP}) + 1)`,
     )
     .limit(1);
 
@@ -49,13 +52,5 @@ export async function bumpClaim(codeId: number): Promise<void> {
 }
 
 export async function sweepExpired(): Promise<void> {
-  await db
-    .delete(codes)
-    .where(
-      or(
-        lt(codes.expiresAt, sql`now()`),
-        sql`${codes.reportCount} >= ${MAX_REPORTS}`,
-        sql`${codes.claimedCount} >= ${MAX_CLAIMS}`,
-      ),
-    );
+  await db.delete(codes).where(lt(codes.expiresAt, sql`now()`));
 }
