@@ -43,6 +43,10 @@ export const POST: RequestHandler = async (event) => {
     typeof body.state === "string" ? body.state.trim().toUpperCase() : "";
   if (!/^[A-Z]{2}$/.test(state)) throw error(400, "state must be 2 letters");
 
+  if (zip === "00000" || state === "XX" || city.toLowerCase() === "unknown") {
+    throw error(400, "could not determine a valid location");
+  }
+
   // ping stays client-reported, the worker can't measure round-trip latency
   const pingMs = Number(body.pingMs);
   if (!(pingMs > 0)) throw error(400, "ping must be a positive number");

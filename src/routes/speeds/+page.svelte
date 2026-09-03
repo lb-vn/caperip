@@ -78,6 +78,10 @@
   async function saveResult() {
     const loc = geo.location;
     if (!test.pingMs || !loc || test.receipts.length === 0) return;
+    if (!loc.city || !loc.state || !loc.postcode) {
+      saveError = "Couldn't determine your location. Try again.";
+      return;
+    }
     if (!turnstile.canSubmit) {
       saveError = "Complete the captcha first.";
       return;
@@ -90,9 +94,9 @@
         method: "POST",
         headers: { "content-type": "application/json" },
         body: JSON.stringify({
-          zip: loc.postcode ?? "00000",
-          city: loc.city ?? "Unknown",
-          state: loc.state ?? "XX",
+          zip: loc.postcode,
+          city: loc.city,
+          state: loc.state,
           pingMs: test.pingMs,
           timeBucket: test.timeBucket,
           device: test.device || null,

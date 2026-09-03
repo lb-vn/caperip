@@ -8,27 +8,22 @@ export interface UserLocation {
 
 type GeoState = "idle" | "pending" | "granted" | "denied";
 
-async function reverseGeocode(
-  lat: number,
-  lng: number,
-): Promise<{
+type GeoResult = {
   city: string | null;
   state: string | null;
   postcode: string | null;
-}> {
+};
+
+// resolves through our own /api/geocode, which calls OpenStreetMap server-side
+async function reverseGeocode(lat: number, lng: number): Promise<GeoResult> {
   try {
-    const res = await fetch(
-      `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json`,
-      { headers: { "User-Agent": "cape.rip speed test" } },
-    );
+    const res = await fetch("/api/geocode", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ lat, lng }),
+    });
     if (!res.ok) return { city: null, state: null, postcode: null };
-    const data = await res.json();
-    const addr = data.address ?? {};
-    return {
-      city: addr.city ?? addr.town ?? addr.village ?? addr.county ?? null,
-      state: addr["ISO3166-2-lvl4"]?.split("-")[1] ?? null,
-      postcode: addr.postcode ?? null,
-    };
+    return (await res.json()) as GeoResult;
   } catch {
     return { city: null, state: null, postcode: null };
   }

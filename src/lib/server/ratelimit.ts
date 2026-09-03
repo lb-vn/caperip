@@ -2,11 +2,12 @@ import { and, eq, gte, sql } from "drizzle-orm";
 import { db } from "./db";
 import { rateEvents } from "./db/schema";
 
-export type Action = "submit" | "report";
+export type Action = "submit" | "report" | "geocode";
 
 const WINDOWS: Record<Action, { ms: number; max: number; label: string }> = {
   submit: { ms: 24 * 60 * 60 * 1000, max: 1, label: "24 hours" },
   report: { ms: 7 * 24 * 60 * 60 * 1000, max: 3, label: "7 days" },
+  geocode: { ms: 60 * 60 * 1000, max: 12, label: "hour" },
 };
 
 export type RateLimit =
