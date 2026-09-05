@@ -1,8 +1,21 @@
 <script lang="ts">
   import { Sunrise, Sun, Sunset, Moon } from "@lucide/svelte";
+  import { citySlug } from "$lib/slug";
   import type { PageData } from "./$types";
 
   let { data }: { data: PageData } = $props();
+
+  const slug = $derived(citySlug(data.city, data.state));
+  const canonical = $derived(`https://cape.rip/speeds/${slug}`);
+  const place = $derived(`${data.city}, ${data.state}`);
+
+  const fastest = $derived(
+    data.byTime.length > 1
+      ? [...data.byTime].sort(
+          (a, b) => Number(b.avgDown) - Number(a.avgDown),
+        )[0]
+      : null,
+  );
 
   function formatDate(iso: string): string {
     return new Date(iso).toLocaleDateString("en-US", {
@@ -25,6 +38,85 @@
     evening: Sunset,
     night: Moon,
   };
+
+  const summary = $derived(
+    data.stats.count === 1
+      ? `One community speed test in ${place} recorded ${data.stats.avgDown} Mbps down, ${data.stats.avgUp} Mbps up and ${data.stats.avgPing} ms ping. A single result is not a citywide average.`
+      : `Across ${data.stats.count} community speed tests in ${place}, Cape averages ${data.stats.avgDown} Mbps down, ${data.stats.avgUp} Mbps up and ${data.stats.avgPing} ms ping.` +
+          (fastest
+            ? ` ${timeLabels[fastest.timeBucket]} is the fastest window at ${fastest.avgDown} Mbps.`
+            : "") +
+          (data.indexable
+            ? ""
+            : " Still a small sample, so treat it as indicative rather than definitive."),
+  );
+
+  const schema = $derived({
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Dataset",
+        "@id": `${canonical}#dataset`,
+        name: `Cape Cellular speed test reports — ${place}`,
+        description: summary,
+        url: canonical,
+        isPartOf: { "@id": "https://cape.rip/#site" },
+        creator: { "@id": "https://cape.rip/#org" },
+        spatialCoverage: {
+          "@type": "Place",
+          address: {
+            "@type": "PostalAddress",
+            addressLocality: data.city,
+            addressRegion: data.state,
+            addressCountry: "US",
+          },
+        },
+        variableMeasured: [
+          {
+            "@type": "PropertyValue",
+            name: "Average download",
+            value: data.stats.avgDown,
+            unitText: "Mbps",
+          },
+          {
+            "@type": "PropertyValue",
+            name: "Average upload",
+            value: data.stats.avgUp,
+            unitText: "Mbps",
+          },
+          {
+            "@type": "PropertyValue",
+            name: "Average ping",
+            value: data.stats.avgPing,
+            unitText: "ms",
+          },
+          {
+            "@type": "PropertyValue",
+            name: "Reports",
+            value: data.stats.count,
+          },
+        ],
+      },
+      {
+        "@type": "BreadcrumbList",
+        itemListElement: [
+          {
+            "@type": "ListItem",
+            position: 1,
+            name: "cape.rip",
+            item: "https://cape.rip/",
+          },
+          {
+            "@type": "ListItem",
+            position: 2,
+            name: "Speed tests",
+            item: "https://cape.rip/speeds",
+          },
+          { "@type": "ListItem", position: 3, name: place },
+        ],
+      },
+    ],
+  });
 
   const timeMax = $derived(
     Math.max(
@@ -135,19 +227,17 @@
 </script>
 
 <svelte:head>
-  <title>Cape Cellular Speeds in {data.city}, {data.state} | cape.rip</title>
-  <meta
-    name="description"
-    content="Cape Cellular speed tests in {data.city}, {data.state}. Average download {data
-      .stats.avgDown} Mbps, upload {data.stats.avgUp} Mbps, ping {data.stats
-      .avgPing} ms from {data.stats.count} community reports."
-  />
-  <link
-    rel="canonical"
-    href="https://cape.rip/speeds/{data.city
-      .toLowerCase()
-      .replace(/\s+/g, '-')}-{data.state.toLowerCase()}"
-  />
+  <title>Cape Cellular Speeds in {place} | cape.rip</title>
+  <meta name="description" content={summary} />
+  <link rel="canonical" href={canonical} />
+  <meta property="og:title" content="Cape Cellular Speeds in {place}" />
+  <meta property="og:description" content={summary} />
+  <meta property="og:url" content={canonical} />
+  {#if data.indexable}
+    {@html `<script type="application/ld+json">${JSON.stringify(schema)}</script>`}
+  {:else}
+    <meta name="robots" content="noindex, follow" />
+  {/if}
 </svelte:head>
 
 <main class="min-h-screen max-w-6xl mx-auto w-full px-6 pt-10 pb-16">
@@ -161,9 +251,8 @@
     <h1 class="text-3xl sm:text-4xl font-black tracking-tight">
       Cape speeds in {data.city}, {data.state}
     </h1>
-    <p class="text-white/60 mt-3 text-sm leading-relaxed">
-      {data.stats.count}
-      {data.stats.count === 1 ? "report" : "reports"} from the community
+    <p class="text-white/60 mt-3 text-sm leading-relaxed max-w-2xl">
+      {summary}
     </p>
   </header>
 
@@ -514,11 +603,11 @@
             >Ping</th
           >
           <th
-            class="px-4 py-3 text-xs uppercase tracking-wider text-white/40 font-medium"
+            class="hidden sm:table-cell px-4 py-3 text-xs uppercase tracking-wider text-white/40 font-medium"
             >Time</th
           >
           <th
-            class="px-4 py-3 text-xs uppercase tracking-wider text-white/40 font-medium"
+            class="hidden sm:table-cell px-4 py-3 text-xs uppercase tracking-wider text-white/40 font-medium"
             >Device</th
           >
         </tr>
@@ -536,13 +625,36 @@
             <td class="px-4 py-3 font-mono"
               >{r.pingMs} <span class="text-white/40">ms</span></td
             >
-            <td class="px-4 py-3 text-white/60 capitalize">{r.timeBucket}</td>
-            <td class="px-4 py-3 text-white/60">{r.device ?? "—"}</td>
+            <td class="hidden sm:table-cell px-4 py-3 text-white/60 capitalize"
+              >{r.timeBucket}</td
+            >
+            <td class="hidden sm:table-cell px-4 py-3 text-white/60"
+              >{r.device ?? "—"}</td
+            >
           </tr>
         {/each}
       </tbody>
     </table>
   </div>
+
+  {#if data.nearby.length > 0}
+    <section class="mt-12">
+      <h2 class="text-xs uppercase tracking-[0.2em] text-white/55 mb-4">
+        Other {data.state} cities
+      </h2>
+      <div class="flex flex-wrap gap-2">
+        {#each data.nearby as c}
+          <a
+            href="/speeds/{citySlug(c.city, c.state)}"
+            class="px-3 py-1.5 text-xs border border-white/10 rounded text-white/70 hover:text-white hover:border-white/25 transition-colors"
+          >
+            {c.city}
+            <span class="text-white/50">{c.avgDown} Mbps</span>
+          </a>
+        {/each}
+      </div>
+    </section>
+  {/if}
 
   <div class="mt-8 flex items-center justify-between">
     <a
@@ -550,12 +662,16 @@
       class="text-xs text-lavender hover:text-lavender-bright transition-colors"
       >&larr; Back to all cities</a
     >
-    <p class="text-xs text-white/30">
-      Speed data contributed by <a
+    <p class="text-xs text-white/50">
+      <a href="/about" class="underline hover:text-white/70 transition-colors"
+        >How these tests are measured</a
+      >
+      &middot; data contributed by
+      <a
         href="https://coveragemap.com?ref=cape.rip"
         target="_blank"
         rel="noopener"
-        class="underline hover:text-white/50 transition-colors"
+        class="underline hover:text-white/70 transition-colors"
         >CoverageMap.com</a
       >
     </p>

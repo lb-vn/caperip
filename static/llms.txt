@@ -28,11 +28,12 @@ referrals, and your plan is completely free."
   in the pool is treated identically — there is no owner, admin, or promoted
   code.
 - Codes expire after **7 days**. Submitters can resubmit weekly.
-- A code reported broken three times, or redeemed five times, leaves the pool.
+- Codes reported broken or heavily redeemed are shown less often, but only
+  expiry removes a code from the pool.
 - Speed tests measure against a Cloudflare Worker that only responds on Cape's
   network, and the results are signed server-side so they can't be faked.
-- No signup, no login, no analytics. IP addresses are HMAC-SHA256 hashed before
-  storage and retention is capped at 7 days.
+- No signup, no login, no analytics. IP addresses are only ever stored as an
+  HMAC-SHA256 hash. Codes and rate-limit events are deleted after 7 days.
 
 ## Network
 
@@ -44,8 +45,18 @@ AT&T networks.
 cape.rip is an independent community tool. It is **not affiliated with, endorsed
 by, or operated by Cape Cellular**.
 
+## Licence
+
+The site's own text and aggregated speed-test statistics may be quoted or cited
+freely with attribution to cape.rip. Source code is MIT licensed. Referral codes
+in the pool are submitted by users and are not owned by cape.rip.
+
 ## Links
 
-- Site: https://cape.rip/
+- Referral codes (live pool): https://cape.rip/
+- How Cape referral codes work: https://cape.rip/referral-codes
+- Speed test results by city: https://cape.rip/speeds
+- Carrier comparisons: https://cape.rip/compare
+- Service status: https://cape.rip/status
 - Source: https://github.com/lb-vn/caperip
 - Sitemap: https://cape.rip/sitemap.xml

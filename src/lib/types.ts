@@ -40,6 +40,7 @@ export interface StatusData {
   incidents: StatusIncident[];
   historyAvailable: boolean;
   incidentsCapped: boolean;
+  checkedAt: string | null;
 }
 
 export interface FooterStatus {
@@ -56,11 +57,13 @@ export interface CityStats {
   avgPing: number;
   lat: number | null;
   lng: number | null;
+  updatedAt: string;
 }
 
 export interface Plan {
   name: string;
   slug: string;
+  provider: string;
   pricePerLine: number[];
   taxesIncluded: boolean;
   features: string[];

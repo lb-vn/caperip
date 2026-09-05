@@ -53,6 +53,19 @@
     },
   };
 
+  const checkedLabel = $derived(
+    status.checkedAt
+      ? new Date(status.checkedAt).toLocaleString("en-US", {
+          month: "short",
+          day: "numeric",
+          hour: "numeric",
+          minute: "2-digit",
+          timeZone: "UTC",
+          timeZoneName: "short",
+        })
+      : "",
+  );
+
   const allOperational = $derived(status.overall.state === "operational");
   const unknown = $derived(status.overall.state === "unknown");
   const bannerHeadline = $derived(
@@ -124,21 +137,12 @@
 <svelte:head>
   <title>{pageTitle}</title>
   <meta name="description" content={metaDescription} />
-  <meta
-    name="keywords"
-    content="Cape status, is Cape down, Cape Cellular status, Cape outage, Cape Cellular down, Cape network status, Cape service status"
-  />
   <link rel="canonical" href={canonical} />
 
   <meta property="og:type" content="website" />
   <meta property="og:title" content={pageTitle} />
   <meta property="og:description" content={metaDescription} />
   <meta property="og:url" content={canonical} />
-  <meta property="og:site_name" content="Cape Cellular Status" />
-
-  <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content={pageTitle} />
-  <meta name="twitter:description" content={metaDescription} />
 
   {@html `<script type="application/ld+json">${JSON.stringify(faqLd).replace(/</g, "\\u003c")}</script>`}
 </svelte:head>
@@ -152,6 +156,15 @@
       Is Cape down? Check the real-time status of the Cape Cellular network and
       app below, including current outages and a history of past incidents.
     </p>
+    {#if status.checkedAt}
+      <p class="text-xs text-white/50 mt-3 flex items-center gap-1.5">
+        <span class="inline-block w-1.5 h-1.5 rounded-full bg-emerald-400"
+        ></span>
+        Last checked
+        <time datetime={status.checkedAt}>{checkedLabel}</time>
+        &middot; refreshes automatically
+      </p>
+    {/if}
   </header>
 
   <div
@@ -189,7 +202,7 @@
     </div>
   </div>
 
-  <h2 class="text-xs uppercase tracking-[0.2em] text-white/40 mb-3">
+  <h2 class="text-xs uppercase tracking-[0.2em] text-white/55 mb-3">
     Services
   </h2>
   {#if status.services.length > 0}
@@ -213,7 +226,7 @@
     </div>
   {/if}
 
-  <h2 class="text-xs uppercase tracking-[0.2em] text-white/40 mb-3">
+  <h2 class="text-xs uppercase tracking-[0.2em] text-white/55 mb-3">
     Past incidents
   </h2>
 
@@ -272,7 +285,7 @@
                     </div>
                   {/if}
                   {#if u.at}
-                    <p class="text-[11px] text-white/30 mt-0.5">
+                    <p class="text-[11px] text-white/50 mt-0.5">
                       {fmtDate(u.at)}
                     </p>
                   {/if}

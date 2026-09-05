@@ -2,6 +2,7 @@ import { error } from "@sveltejs/kit";
 import { eq, and, desc, sql } from "drizzle-orm";
 import { db } from "$lib/server/db";
 import { speedReports } from "$lib/server/db/schema";
+import { MIN_INDEXABLE_REPORTS, topCities } from "$lib/server/speeds";
 import type { PageServerLoad } from "./$types";
 
 function titleCase(str: string): string {
@@ -110,9 +111,15 @@ export const load: PageServerLoad = async ({ params }) => {
     .map((t) => byTime.find((r) => r.timeBucket === t))
     .filter((r): r is NonNullable<typeof r> => r != null);
 
+  const nearby = (await topCities().catch(() => []))
+    .filter((c) => c.state === state && c.city !== city)
+    .slice(0, 6);
+
   return {
     city,
     state,
+    indexable: stats.count >= MIN_INDEXABLE_REPORTS,
+    nearby,
     reports: reports.map((r) => ({
       ...r,
       createdAt: r.createdAt.toISOString(),

@@ -4,8 +4,10 @@ import { sql } from "drizzle-orm";
 import type { RequestHandler } from "./$types";
 import { db } from "$lib/server/db";
 import { speedReports } from "$lib/server/db/schema";
+import { submitUrls } from "$lib/server/indexnow";
 import { ipHashFor } from "$lib/server/ip";
 import { verifyTurnstile } from "$lib/server/turnstile";
+import { citySlug } from "$lib/slug";
 
 const TIME_BUCKETS = ["morning", "afternoon", "evening", "night"];
 const MAX_DOWN_MBPS = 500;
@@ -116,6 +118,8 @@ export const POST: RequestHandler = async (event) => {
     fingerprint,
     status: "active",
   });
+
+  submitUrls(["/speeds", `/speeds/${citySlug(titleCase(city), state)}`]);
 
   return json({ ok: true, downMbps, upMbps });
 };

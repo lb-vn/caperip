@@ -2,6 +2,7 @@
   "cape": {
     "name": "Cape",
     "slug": "cape",
+    "provider": "Cape Cellular",
     "pricePerLine": [70, 70, 70, 70, 70],
     "taxesIncluded": true,
     "features": [
@@ -19,6 +20,7 @@
   "att": {
     "name": "AT&T Value Plus",
     "slug": "att",
+    "provider": "AT&T",
     "pricePerLine": [50, 45, 35, 30, 30],
     "taxesIncluded": false,
     "features": ["5GB priority data", "3GB hotspot", "Nationwide 5G"],
@@ -29,6 +31,7 @@
   "tmobile": {
     "name": "T-Mobile Essentials",
     "slug": "tmobile",
+    "provider": "T-Mobile",
     "pricePerLine": [65, 50, 40, 35, 32],
     "taxesIncluded": false,
     "features": ["50GB premium data", "Nationwide 5G"],
@@ -39,6 +42,7 @@
   "verizon": {
     "name": "Verizon Unlimited Plus",
     "slug": "verizon",
+    "provider": "Verizon",
     "pricePerLine": [80, 70, 55, 45, 45],
     "taxesIncluded": false,
     "features": ["30GB hotspot", "5G Ultra Wideband", "3-year price lock"],
@@ -49,6 +53,7 @@
   "usmobile": {
     "name": "US Mobile Premium",
     "slug": "usmobile",
+    "provider": "US Mobile",
     "pricePerLine": [33, 33, 33, 33, 33],
     "taxesIncluded": false,
     "features": [
@@ -63,6 +68,7 @@
   "mint": {
     "name": "Mint Mobile Unlimited",
     "slug": "mint",
+    "provider": "Mint Mobile",
     "pricePerLine": [30, 30, 30, 30, 30],
     "taxesIncluded": false,
     "features": ["20GB hotspot", "Free calls to Canada & Mexico"],
@@ -73,6 +79,7 @@
   "visible": {
     "name": "Visible+",
     "slug": "visible",
+    "provider": "Visible",
     "pricePerLine": [35, 35, 35, 35, 35],
     "taxesIncluded": true,
     "features": [
@@ -86,6 +93,7 @@
   "googlefi": {
     "name": "Google Fi Unlimited Premium",
     "slug": "googlefi",
+    "provider": "Google Fi",
     "pricePerLine": [65, 55, 45, 40, 40],
     "taxesIncluded": true,
     "features": [

@@ -23,10 +23,28 @@
   <div
     class="max-w-6xl mx-auto px-6 py-5 flex flex-col-reverse sm:flex-row items-center justify-between gap-4 text-xs text-white/40"
   >
-    <p class="text-center sm:text-left">
-      cape.rip is an independent community tool. Not affiliated with, endorsed
-      by, or operated by Cape Cellular.
-    </p>
+    <div class="text-center sm:text-left">
+      <p>
+        cape.rip is an independent community tool. Not affiliated with, endorsed
+        by, or operated by Cape Cellular.
+      </p>
+      <p
+        class="mt-1.5 flex flex-wrap items-center justify-center sm:justify-start gap-x-2"
+      >
+        <a
+          href="/referral-codes"
+          class="text-white/55 hover:text-white/80 transition-colors"
+          >How Cape referral codes work</a
+        >
+        <span aria-hidden="true" class="text-base leading-none">•</span>
+        <a
+          href="https://github.com/lb-vn/caperip/issues"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="text-white/55 hover:text-white/80 transition-colors">Contact</a
+        >
+      </p>
+    </div>
     <div class="shrink-0 flex items-center gap-3">
       <a
         href="https://github.com/lb-vn/caperip"

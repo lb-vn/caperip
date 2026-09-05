@@ -15,7 +15,10 @@ services:
       retries: 10
 
   app:
-    build: .
+    build:
+      context: .
+      args:
+        PUBLIC_SPEEDTEST_URL: ${PUBLIC_SPEEDTEST_URL:-}
     restart: unless-stopped
     depends_on:
       db:

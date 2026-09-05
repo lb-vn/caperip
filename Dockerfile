@@ -7,6 +7,8 @@ COPY package.json ./
 RUN npm install --no-audit --no-fund
 
 FROM base AS build
+ARG PUBLIC_SPEEDTEST_URL
+ENV PUBLIC_SPEEDTEST_URL=$PUBLIC_SPEEDTEST_URL
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 RUN npm run build && npm prune --omit=dev

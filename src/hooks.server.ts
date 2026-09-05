@@ -5,6 +5,8 @@ import { startStatusRefresh } from "$lib/server/status";
 
 let ready: Promise<void> | null = null;
 
+const CACHEABLE = /^\/(about|referral-codes|compare|speeds\/.)/;
+
 async function boot(): Promise<void> {
   await bootstrapSchema();
   startCleanupLoop();
@@ -19,5 +21,20 @@ export const handle: Handle = async ({ event, resolve }) => {
     });
   }
   await ready;
-  return resolve(event);
+
+  const response = await resolve(event);
+
+  response.headers.set(
+    "strict-transport-security",
+    "max-age=31536000; includeSubDomains",
+  );
+
+  if (event.request.method === "GET" && CACHEABLE.test(event.url.pathname)) {
+    response.headers.set(
+      "cache-control",
+      "public, max-age=60, stale-while-revalidate=3600",
+    );
+  }
+
+  return response;
 };

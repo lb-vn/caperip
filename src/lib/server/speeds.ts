@@ -5,6 +5,8 @@ import type { CityStats } from "$lib/types";
 
 const TTL_MS = 60_000;
 
+export const MIN_INDEXABLE_REPORTS = 5;
+
 let cache: { data: CityStats[]; at: number } | null = null;
 let inflight: Promise<CityStats[]> | null = null;
 
@@ -20,6 +22,7 @@ function refresh(): Promise<CityStats[]> {
       avgPing: sql<number>`round(avg(ping_ms))::int`,
       lat: sql<number | null>`avg(lat)::real`,
       lng: sql<number | null>`avg(lng)::real`,
+      updatedAt: sql<string>`to_char(max(created_at) at time zone 'utc', 'YYYY-MM-DD')`,
     })
     .from(speedReports)
     .where(eq(speedReports.status, "active"))
@@ -40,4 +43,9 @@ export async function topCities(): Promise<CityStats[]> {
   if (!cache) return refresh();
   if (Date.now() - cache.at >= TTL_MS) refresh().catch(() => {});
   return cache.data;
+}
+
+export async function indexableCities(): Promise<CityStats[]> {
+  const cities = await topCities();
+  return cities.filter((c) => c.count >= MIN_INDEXABLE_REPORTS);
 }

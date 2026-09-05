@@ -1,5 +1,6 @@
 <script lang="ts">
   import type { PageData } from "./$types";
+  import type { Plan } from "$lib/types";
   import { capeUrl, featureUrls } from "$lib/track";
 
   let { data }: { data: PageData } = $props();
@@ -23,6 +24,34 @@
   let referralDiscount = $derived(lines * 20);
   let capeWithReferrals = $derived(Math.max(0, capeCost - referralDiscount));
   let monthlyDiffWithReferrals = $derived(capeWithReferrals - carrierCost);
+
+  const VERIFIED = "2026-09-05";
+
+  const capeOnly = $derived(
+    data.cape.features.filter((f) => !data.carrier.features.includes(f)),
+  );
+  const carrierOnly = $derived(
+    data.carrier.features.filter((f) => !data.cape.features.includes(f)),
+  );
+  const carrierScalesWithLines = $derived(
+    data.carrier.pricePerLine[4] < data.carrier.pricePerLine[0],
+  );
+
+  function planSchema(plan: Plan) {
+    return {
+      "@type": "Service",
+      name: plan.name,
+      serviceType: "Mobile phone plan",
+      description: `${plan.name} — ${plan.network}. ${plan.dataNote}. Features: ${plan.features.join(", ")}.`,
+      url: plan.source,
+      areaServed: { "@type": "Country", name: "US" },
+      provider: {
+        "@type": "Organization",
+        name: plan.provider,
+        url: plan.source,
+      },
+    };
+  }
 </script>
 
 <svelte:head>
@@ -52,39 +81,38 @@
   {@html `<script type="application/ld+json">${JSON.stringify({
     "@context": "https://schema.org",
     "@graph": [
+      planSchema(data.cape),
+      planSchema(data.carrier),
       {
-        "@type": "Product",
-        name: data.cape.name,
-        description: `${data.cape.name} — ${data.cape.network}. ${data.cape.dataNote}. Features: ${data.cape.features.join(", ")}.`,
-        url: data.cape.source,
-        offers: {
-          "@type": "Offer",
-          price: data.cape.pricePerLine[0],
-          priceCurrency: "USD",
-          priceSpecification: {
-            "@type": "UnitPriceSpecification",
-            price: data.cape.pricePerLine[0],
-            priceCurrency: "USD",
-            billingDuration: "P1M",
-          },
-        },
+        "@type": "WebPage",
+        "@id": `https://cape.rip/compare/${data.slug}#webpage`,
+        url: `https://cape.rip/compare/${data.slug}`,
+        name: `Cape vs ${data.carrier.name}`,
+        dateModified: VERIFIED,
+        isPartOf: { "@id": "https://cape.rip/#site" },
+        publisher: { "@id": "https://cape.rip/#org" },
       },
       {
-        "@type": "Product",
-        name: data.carrier.name,
-        description: `${data.carrier.name} — ${data.carrier.network}. ${data.carrier.dataNote}. Features: ${data.carrier.features.join(", ")}.`,
-        url: data.carrier.source,
-        offers: {
-          "@type": "Offer",
-          price: data.carrier.pricePerLine[0],
-          priceCurrency: "USD",
-          priceSpecification: {
-            "@type": "UnitPriceSpecification",
-            price: data.carrier.pricePerLine[0],
-            priceCurrency: "USD",
-            billingDuration: "P1M",
+        "@type": "BreadcrumbList",
+        itemListElement: [
+          {
+            "@type": "ListItem",
+            position: 1,
+            name: "cape.rip",
+            item: "https://cape.rip/",
           },
-        },
+          {
+            "@type": "ListItem",
+            position: 2,
+            name: "Compare",
+            item: "https://cape.rip/compare",
+          },
+          {
+            "@type": "ListItem",
+            position: 3,
+            name: `Cape vs ${data.carrier.name}`,
+          },
+        ],
       },
     ],
   })}</script>`}
@@ -162,14 +190,14 @@
           href={capeUrl("/", "compare_source")}
           target="_blank"
           rel="noopener noreferrer"
-          class="mt-6 inline-block text-xs text-white/30 hover:text-white/50 transition-colors"
+          class="mt-6 inline-block text-xs text-white/50 hover:text-white/50 transition-colors"
         >
           Source: cape.co
         </a>
       </div>
 
       <div class="bg-card rounded-md p-5 sm:p-6">
-        <p class="text-xs uppercase tracking-[0.2em] text-white/40 mb-2">
+        <p class="text-xs uppercase tracking-[0.2em] text-white/55 mb-2">
           Mainstream carrier
         </p>
         <h2 class="text-xl font-bold">{data.carrier.name}</h2>
@@ -211,7 +239,7 @@
           href={data.carrier.source}
           target="_blank"
           rel="noopener noreferrer"
-          class="mt-6 inline-block text-xs text-white/30 hover:text-white/50 transition-colors"
+          class="mt-6 inline-block text-xs text-white/50 hover:text-white/50 transition-colors"
         >
           Source: {data.carrier.source
             .replace(/^https?:\/\/(www\.)?/, "")
@@ -223,7 +251,7 @@
 
   <section class="max-w-6xl mx-auto w-full px-6 pb-8">
     <div class="bg-card rounded-md p-5 sm:p-6">
-      <h2 class="text-xs uppercase tracking-[0.2em] text-white/40 mb-6">
+      <h2 class="text-xs uppercase tracking-[0.2em] text-white/55 mb-6">
         Cost comparison
       </h2>
 
@@ -363,11 +391,90 @@
     </div>
   </section>
 
+  <section class="max-w-6xl mx-auto w-full px-6 pb-8">
+    <h2 class="text-xs uppercase tracking-[0.2em] text-white/55 mb-4">
+      Which one should you pick?
+    </h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div class="border border-lavender/25 rounded-md p-5">
+        <h3 class="text-sm font-semibold mb-3">
+          Pick {data.cape.name} if&hellip;
+        </h3>
+        <ul class="space-y-2 text-xs text-white/60 leading-relaxed">
+          {#if capeOnly.length > 0}
+            <li>
+              You want {capeOnly.slice(0, 3).join(", ")}. {data.carrier.name} does
+              not offer {capeOnly.length > 1 ? "these" : "this"} at any tier.
+            </li>
+          {/if}
+          <li>
+            Your phone number is the account-recovery path for your email and
+            bank, so the carrier holding it is part of your threat model.
+          </li>
+          {#if data.cape.taxesIncluded && !data.carrier.taxesIncluded}
+            <li>
+              You want the advertised price to be the real one. Cape includes
+              taxes and fees; {data.carrier.name} adds them at checkout, so its true
+              cost is above ${data.carrier.pricePerLine[0]}.
+            </li>
+          {/if}
+          <li>
+            You can find {monthlyDiff > 0 ? "a few" : "any"} referrals. Each one takes
+            $20/month off for both parties, up to five, and four covers Cape's $70
+            entirely.
+          </li>
+        </ul>
+      </div>
+      <div class="border border-white/15 rounded-md p-5">
+        <h3 class="text-sm font-semibold mb-3">
+          Pick {data.carrier.name} if&hellip;
+        </h3>
+        <ul class="space-y-2 text-xs text-white/60 leading-relaxed">
+          {#if monthlyDiff > 0}
+            <li>
+              Monthly cost is the deciding factor. It is ${monthlyDiff}/month
+              cheaper per line, or ${yearlyDiff}/year, before any referrals.
+            </li>
+          {/if}
+          {#if carrierScalesWithLines}
+            <li>
+              You are buying for a household. {data.carrier.name} drops to ${data
+                .carrier.pricePerLine[4]}/line at five lines, while Cape stays
+              flat at ${data.cape.pricePerLine[0]} and discounts only through referrals.
+            </li>
+          {/if}
+          {#if carrierOnly.length > 0}
+            <li>You specifically need {carrierOnly.slice(0, 3).join(", ")}.</li>
+          {/if}
+          <li>
+            {data.carrier.network} coverage is materially better where you actually
+            live, which is worth checking before any privacy feature.
+          </li>
+        </ul>
+      </div>
+    </div>
+    <p class="text-xs text-white/50 mt-4">
+      Plan pricing and features last verified {VERIFIED}. Cape data from
+      <a
+        href={data.cape.source}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="underline hover:text-white/70">cape.co</a
+      >, {data.carrier.name} data from
+      <a
+        href={data.carrier.source}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="underline hover:text-white/70">{data.carrier.provider}</a
+      >.
+    </p>
+  </section>
+
   <section class="max-w-6xl mx-auto w-full px-6 pb-12">
     <div
       class="bg-lavender/4 border border-lavender/15 rounded-md p-5 sm:p-6 text-center"
     >
-      <p class="text-xs uppercase tracking-[0.2em] text-white/40 mb-3">
+      <p class="text-xs uppercase tracking-[0.2em] text-white/55 mb-3">
         Switching to Cape?
       </p>
       <p class="text-sm text-white/60 leading-relaxed max-w-2xl mx-auto">

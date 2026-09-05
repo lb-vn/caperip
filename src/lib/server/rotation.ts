@@ -29,12 +29,20 @@ export async function pickCode(excludeId?: number): Promise<Code | null> {
   return rows[0] ?? null;
 }
 
-export async function activeCodeCount(): Promise<number> {
+export async function poolStats(): Promise<{
+  count: number;
+  updatedAt: string | null;
+}> {
   const rows = await db
-    .select({ count: sql<number>`count(*)::int` })
+    .select({
+      count: sql<number>`count(*)::int`,
+      updatedAt: sql<
+        string | null
+      >`to_char(max(${codes.submittedAt}) at time zone 'utc', 'YYYY-MM-DD"T"HH24:MI:SS"Z"')`,
+    })
     .from(codes)
     .where(ACTIVE);
-  return rows[0]?.count ?? 0;
+  return { count: rows[0]?.count ?? 0, updatedAt: rows[0]?.updatedAt ?? null };
 }
 
 export async function bumpImpression(codeId: number): Promise<void> {

@@ -1,22 +1,16 @@
 import { env as publicEnv } from "$env/dynamic/public";
 import { issueImpressionToken } from "$lib/server/impression";
-import {
-  activeCodeCount,
-  bumpImpression,
-  pickCode,
-} from "$lib/server/rotation";
+import { bumpImpression, pickCode, poolStats } from "$lib/server/rotation";
 import { topCities } from "$lib/server/speeds";
 import type { PageServerLoad } from "./$types";
 
 export const load: PageServerLoad = async ({ cookies }) => {
-  const pool = await Promise.all([pickCode(), activeCodeCount()]).catch(
-    (err) => {
-      console.error("[codes]", err);
-      return null;
-    },
-  );
+  const pool = await Promise.all([pickCode(), poolStats()]).catch((err) => {
+    console.error("[codes]", err);
+    return null;
+  });
   const speedCities = await topCities().catch(() => []);
-  const [code, activeCount] = pool ?? [null, 0];
+  const [code, stats] = pool ?? [null, { count: 0, updatedAt: null }];
 
   if (code) {
     await bumpImpression(code.id).catch(() => {});
@@ -30,7 +24,8 @@ export const load: PageServerLoad = async ({ cookies }) => {
 
   return {
     initial: code && { id: code.id, value: code.code },
-    activeCount,
+    activeCount: stats.count,
+    poolUpdatedAt: stats.updatedAt,
     speedCities,
     poolAvailable: pool !== null,
     turnstileSiteKey: publicEnv.PUBLIC_TURNSTILE_SITE_KEY ?? "",

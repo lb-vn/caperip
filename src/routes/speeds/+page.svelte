@@ -1,6 +1,8 @@
 <script lang="ts">
   import { untrack } from "svelte";
   import type { PageData } from "./$types";
+  import type { CityStats } from "$lib/types";
+  import { citySlug } from "$lib/slug";
   import { useTurnstile } from "$lib/turnstile.svelte";
   import { useSpeedTest } from "$lib/speedtest.svelte";
   import { useGeolocation } from "$lib/geolocation.svelte";
@@ -31,6 +33,15 @@
 
   const topCities = $derived(data.cities.slice(0, 3));
   const restCities = $derived(data.cities.slice(3));
+
+  const citiesByState = $derived(
+    Object.entries(
+      data.cities.reduce<Record<string, CityStats[]>>((acc, c) => {
+        (acc[c.state] ??= []).push(c);
+        return acc;
+      }, {}),
+    ).sort(([a], [b]) => a.localeCompare(b)),
+  );
   const visibleCities = $derived(restCities.slice(0, shown));
 
   const localCity = $derived(
@@ -40,10 +51,6 @@
         c.state.toLowerCase() === geo.location?.state?.toLowerCase(),
     ) ?? null,
   );
-
-  function citySlug(city: string, state: string): string {
-    return `${city.toLowerCase().replace(/\s+/g, "-")}-${state.toLowerCase()}`;
-  }
 
   function startTest() {
     if (!geo.location) return;
@@ -132,6 +139,15 @@
     content="Run a live speed test on Cape Cellular's network and see community-submitted results by city."
   />
   <link rel="canonical" href="https://cape.rip/speeds" />
+  <meta
+    property="og:title"
+    content="Cape Cellular Speed Tests — Community Reports | cape.rip"
+  />
+  <meta
+    property="og:description"
+    content="Run a live speed test on Cape Cellular's network and see community-submitted results by city."
+  />
+  <meta property="og:url" content="https://cape.rip/speeds" />
 </svelte:head>
 
 <main class="min-h-screen max-w-6xl mx-auto w-full px-6 pt-10 pb-16">
@@ -150,7 +166,7 @@
   >
     {#if geo.state === "idle" || geo.state === "pending"}
       <div class="text-center">
-        <h2 class="text-xs uppercase tracking-[0.2em] text-white/40 mb-4">
+        <h2 class="text-xs uppercase tracking-[0.2em] text-white/55 mb-4">
           Your area
         </h2>
         <p class="text-white/50 text-sm mb-5 max-w-md mx-auto leading-relaxed">
@@ -168,7 +184,7 @@
       </div>
     {:else if geo.state === "denied"}
       <div class="text-center">
-        <h2 class="text-xs uppercase tracking-[0.2em] text-white/40 mb-4">
+        <h2 class="text-xs uppercase tracking-[0.2em] text-white/55 mb-4">
           Your area
         </h2>
         <p class="text-amber-200 font-medium text-sm">Location access denied</p>
@@ -185,13 +201,13 @@
         </button>
       </div>
     {:else if test.phase === "idle"}
-      <h2 class="text-xs uppercase tracking-[0.2em] text-white/40 mb-1">
+      <h2 class="text-xs uppercase tracking-[0.2em] text-white/55 mb-1">
         {localCity
           ? `Cape speeds in ${localCity.city}, ${localCity.state}`
           : "Your area"}
       </h2>
       {#if localCity}
-        <p class="text-xs text-white/30 mb-5">
+        <p class="text-xs text-white/50 mb-5">
           Based on {localCity.count} community {localCity.count === 1
             ? "report"
             : "reports"}
@@ -257,7 +273,7 @@
         </button>
       </div>
     {:else if test.phase === "done"}
-      <h2 class="text-xs uppercase tracking-[0.2em] text-white/40 mb-4">
+      <h2 class="text-xs uppercase tracking-[0.2em] text-white/55 mb-4">
         Your result
       </h2>
       <div class="grid grid-cols-3 gap-3 mb-5">
@@ -331,7 +347,7 @@
           : test.phase === "download"
             ? test.downloadMbps
             : test.uploadMbps}
-      <h2 class="text-xs uppercase tracking-[0.2em] text-white/40 mb-4">
+      <h2 class="text-xs uppercase tracking-[0.2em] text-white/55 mb-4">
         {PHASE_LABELS[test.phase] ?? "Speed test"}
       </h2>
       <p
@@ -373,7 +389,7 @@
   </div>
 
   {#if data.cities.length > 0}
-    <h2 class="text-xs uppercase tracking-[0.2em] text-white/40 mb-4">
+    <h2 class="text-xs uppercase tracking-[0.2em] text-white/55 mb-4">
       Community results
     </h2>
     <div
@@ -383,7 +399,7 @@
         <SpeedMap cities={data.cities} />
       </div>
       <div class="flex flex-col gap-3 min-w-0">
-        <h3 class="text-xs uppercase tracking-[0.2em] text-white/40">
+        <h3 class="text-xs uppercase tracking-[0.2em] text-white/55">
           Top cities
         </h3>
         {#each topCities as c (c.city + c.state)}
@@ -413,7 +429,7 @@
     </div>
 
     {#if restCities.length > 0}
-      <h2 class="text-xs uppercase tracking-[0.2em] text-white/40 mb-4">
+      <h2 class="text-xs uppercase tracking-[0.2em] text-white/55 mb-4">
         All cities
       </h2>
       <div class="bg-card rounded-md overflow-x-auto">
@@ -470,6 +486,26 @@
         </div>
       {/if}
     {/if}
+
+    <h2 class="text-xs uppercase tracking-[0.2em] text-white/55 mt-10 mb-4">
+      Every city
+    </h2>
+    <div class="flex flex-col gap-3">
+      {#each citiesByState as [state, cities] (state)}
+        <div class="flex flex-wrap items-baseline gap-x-3 gap-y-1.5">
+          <span class="font-mono text-xs text-white/55 w-7 shrink-0"
+            >{state}</span
+          >
+          {#each cities as c (c.city)}
+            <a
+              href="/speeds/{citySlug(c.city, c.state)}"
+              class="text-xs text-white/70 hover:text-lavender transition-colors"
+              >{c.city}</a
+            >
+          {/each}
+        </div>
+      {/each}
+    </div>
   {:else}
     <div class="bg-card rounded-md p-10 text-center">
       <p class="text-white/50">
@@ -478,7 +514,7 @@
     </div>
   {/if}
 
-  <p class="text-xs text-white/30 mt-8 text-right">
+  <p class="text-xs text-white/50 mt-8 text-right">
     Speed data contributed by <a
       href="https://coveragemap.com?ref=cape.rip"
       target="_blank"

@@ -88,6 +88,41 @@
     },
   ];
 
+  const VERIFIED = "2026-09-05";
+
+  const FIT = [
+    {
+      good: true,
+      label: "Your number guards your accounts",
+      body: "It is the recovery path for your email and your bank, so SIM swap protection and an SS7 lock are defending the thing everything else hangs off.",
+    },
+    {
+      good: true,
+      label: "You want no name on the account",
+      body: "Cape does not collect names, SSNs, government IDs, or email addresses, and payment is tokenized through Stripe.",
+    },
+    {
+      good: true,
+      label: "T-Mobile or AT&T already works where you live",
+      body: "Cape leases both footprints. If either gives you decent service today, Cape will too.",
+    },
+    {
+      good: false,
+      label: "You want the cheapest bill",
+      body: "Mint and Visible undercut Cape by $30-$40/month. Cape is priced as a privacy product, not a budget one.",
+    },
+    {
+      good: false,
+      label: "You need a family plan",
+      body: "There is no multi-line discount. Referrals are the only way the price comes down, and they are per line.",
+    },
+    {
+      good: false,
+      label: "You need RCS or Wi-Fi calling today",
+      body: "Both are still shipping. VoWiFi works on iOS but currently conflicts with IMSI rotation.",
+    },
+  ];
+
   const title = "What is Cape Cellular? A Plain-English TLDR | cape.rip";
   const description =
     "Cape Cellular explained: $70/month all-in, runs on T-Mobile and AT&T, IMSI rotation, SIM swap protection, SS7 lock, and no name on the account. An independent community rundown.";
@@ -100,6 +135,29 @@
   <meta property="og:title" content={title} />
   <meta property="og:description" content={description} />
   <meta property="og:url" content="https://cape.rip/about" />
+  {@html `<script type="application/ld+json">${JSON.stringify({
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebPage",
+        "@id": "https://cape.rip/about#webpage",
+        url: "https://cape.rip/about",
+        name: title,
+        description,
+        dateModified: VERIFIED,
+        isPartOf: { "@id": "https://cape.rip/#site" },
+        publisher: { "@id": "https://cape.rip/#org" },
+        author: { "@id": "https://cape.rip/#maintainer" },
+      },
+      {
+        "@type": "Person",
+        "@id": "https://cape.rip/#maintainer",
+        name: "lb-vn",
+        url: "https://github.com/lb-vn",
+        description: "Maintainer of cape.rip.",
+      },
+    ],
+  })}</script>`}
 </svelte:head>
 
 <main class="min-h-screen">
@@ -125,7 +183,7 @@
 
   <section class="max-w-6xl mx-auto w-full px-6 pb-8">
     <div class="bg-card rounded-md p-6">
-      <h2 class="text-xs uppercase tracking-[0.2em] text-white/40 mb-4">
+      <h2 class="text-xs uppercase tracking-[0.2em] text-white/55 mb-4">
         TLDR
       </h2>
       <ul class="space-y-2.5 text-sm text-white/70 leading-relaxed">
@@ -140,7 +198,7 @@
   </section>
 
   <section class="max-w-6xl mx-auto w-full px-6 pb-8">
-    <h2 class="text-xs uppercase tracking-[0.2em] text-white/40 mb-4">
+    <h2 class="text-xs uppercase tracking-[0.2em] text-white/55 mb-4">
       What you get
     </h2>
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -167,7 +225,7 @@
 
   <section class="max-w-6xl mx-auto w-full px-6 pb-8">
     <div class="bg-card rounded-md p-6">
-      <h2 class="text-xs uppercase tracking-[0.2em] text-white/40 mb-4">
+      <h2 class="text-xs uppercase tracking-[0.2em] text-white/55 mb-4">
         External audit
       </h2>
       <div class="space-y-3 text-sm text-white/60 leading-relaxed">
@@ -211,7 +269,7 @@
   </section>
 
   <section class="max-w-6xl mx-auto w-full px-6 pb-8">
-    <h2 class="text-xs uppercase tracking-[0.2em] text-white/40 mb-4">
+    <h2 class="text-xs uppercase tracking-[0.2em] text-white/55 mb-4">
       Plan details
     </h2>
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -227,7 +285,7 @@
   <section class="max-w-6xl mx-auto w-full px-6 pb-8">
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
       <div class="bg-card rounded-md p-6">
-        <h2 class="text-xs uppercase tracking-[0.2em] text-white/40 mb-4">
+        <h2 class="text-xs uppercase tracking-[0.2em] text-white/55 mb-4">
           When law enforcement asks
         </h2>
         <ul class="space-y-2.5 text-sm text-white/60 leading-relaxed">
@@ -245,7 +303,7 @@
       </div>
 
       <div class="bg-card rounded-md p-6">
-        <h2 class="text-xs uppercase tracking-[0.2em] text-white/40 mb-4">
+        <h2 class="text-xs uppercase tracking-[0.2em] text-white/55 mb-4">
           Who is behind it
         </h2>
         <dl class="space-y-3 text-sm">
@@ -263,11 +321,11 @@
   </section>
 
   <section class="max-w-6xl mx-auto w-full px-6 pb-8">
-    <h2 class="text-xs uppercase tracking-[0.2em] text-white/40 mb-4">
+    <h2 class="text-xs uppercase tracking-[0.2em] text-white/55 mb-4">
       Where to go next
     </h2>
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-      {#each [{ href: "/", label: "Referral codes", body: "$20/mo off. No account needed.", external: false }, { href: "/speeds", label: "Speed tests", body: "Real user speed tests, by city.", external: false }, { href: "/compare", label: "Compare carriers", body: "Cape vs Verizon, T-Mobile, Mint, and more.", external: false }, { href: "/status", label: "Service status", body: "Network and app status, tracked independently.", external: false }, { href: capeUrl("/", "about_links"), label: "cape.co", body: "Official site. Sign up here.", external: true }, { href: "https://www.reddit.com/r/CapeCellular/", label: "r/CapeCellular", body: "Official subreddit. User reports and answers.", external: true }, { href: capeUrl("/coverage", "about_links"), label: "Coverage map", body: "Cape's official coverage map.", external: true }, { href: capeUrl("/faqs", "about_links"), label: "Cape's FAQ", body: "Billing, porting, and devices.", external: true }] as link}
+      {#each [{ href: "/", label: "Referral codes", body: "$20/mo off. No account needed.", external: false }, { href: "/referral-codes", label: "How referral codes work", body: "The $20/mo math, and why codes stop working.", external: false }, { href: "/speeds", label: "Speed tests", body: "Real user speed tests, by city.", external: false }, { href: "/compare", label: "Compare carriers", body: "Cape vs Verizon, T-Mobile, Mint, and more.", external: false }, { href: "/status", label: "Service status", body: "Network and app status, tracked independently.", external: false }, { href: capeUrl("/", "about_links"), label: "cape.co", body: "Official site. Sign up here.", external: true }, { href: "https://www.reddit.com/r/CapeCellular/", label: "r/CapeCellular", body: "Official subreddit. User reports and answers.", external: true }, { href: capeUrl("/coverage", "about_links"), label: "Coverage map", body: "Cape's official coverage map.", external: true }, { href: capeUrl("/faqs", "about_links"), label: "Cape's FAQ", body: "Billing, porting, and devices.", external: true }] as link}
         <a
           href={link.href}
           target={link.external ? "_blank" : undefined}
@@ -288,17 +346,80 @@
     </div>
   </section>
 
+  <section class="max-w-6xl mx-auto w-full px-6 pb-8">
+    <h2 class="text-xs uppercase tracking-[0.2em] text-white/55 mb-4">
+      Who Cape is and is not for
+    </h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      {#each FIT as item}
+        <div
+          class="border rounded-md p-5 {item.good
+            ? 'border-emerald-400/25'
+            : 'border-amber-400/25'}"
+        >
+          <p class="text-sm font-semibold mb-2">
+            <span class={item.good ? "text-emerald-400" : "text-amber-400"}
+              >{item.good ? "Good fit" : "Poor fit"}</span
+            >
+            &middot; {item.label}
+          </p>
+          <p class="text-xs text-white/55 leading-relaxed">{item.body}</p>
+        </div>
+      {/each}
+    </div>
+    <p class="text-xs text-white/50 mt-4">
+      Pricing and feature claims on this page last verified {VERIFIED} against cape.co.
+    </p>
+  </section>
+
+  <section class="max-w-6xl mx-auto w-full px-6 pb-8">
+    <h2 class="text-xs uppercase tracking-[0.2em] text-white/55 mb-4">
+      Who runs cape.rip
+    </h2>
+    <div class="bg-card rounded-md p-6">
+      <p class="text-sm text-white/60 leading-relaxed">
+        cape.rip is maintained by
+        <a
+          href="https://github.com/lb-vn"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="text-lavender hover:text-lavender-bright transition-colors"
+          >lb-vn</a
+        >
+        with help from open source contributors. The whole site is
+        <a
+          href="https://github.com/lb-vn/caperip"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="text-lavender hover:text-lavender-bright transition-colors"
+          >public on GitHub</a
+        >, including how codes are pooled, weighted, and expired. Corrections and bug reports
+        go to
+        <a
+          href="https://github.com/lb-vn/caperip/issues"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="text-lavender hover:text-lavender-bright transition-colors"
+          >GitHub Issues</a
+        >.
+      </p>
+      <p class="text-sm text-white/60 leading-relaxed mt-4">
+        It is an independent community tool and is
+        <strong class="text-white"
+          >not affiliated with, endorsed by, or operated by Cape Cellular</strong
+        >. Nothing here is official. There is no signup, no login, and no
+        analytics, and submitter IP addresses are only ever stored as an
+        HMAC-SHA256 hash.
+      </p>
+    </div>
+  </section>
+
   <section class="max-w-6xl mx-auto w-full px-6 pb-12">
     <div
       class="bg-lavender/4 border border-lavender/15 rounded-md p-5 sm:p-6 text-center"
     >
-      <p class="text-xs uppercase tracking-[0.2em] text-white/40 mb-3">
-        Worth it?
-      </p>
       <p class="text-sm text-white/60 leading-relaxed max-w-2xl mx-auto">
-        Your phone number is the recovery method for your email and your bank,
-        which makes the carrier holding it part of your threat model. Cape is
-        $70/month, or $0 with four referrals.
+        Cape is $70/month all in, or $0/month with four referrals.
       </p>
       <a
         href="/"

@@ -2,8 +2,10 @@
   import { untrack } from "svelte";
   import { Copy, Check, CircleHelp } from "@lucide/svelte";
   import type { PageData } from "./$types";
+  import { citySlug } from "$lib/slug";
   import { capeUrl } from "$lib/track";
   import { useTurnstile } from "$lib/turnstile.svelte";
+  import { onMount } from "svelte";
   import SpeedMap from "$lib/components/SpeedMap.svelte";
   import { CODE_LENGTH, CODE_PATTERN } from "$lib/validation";
 
@@ -14,6 +16,17 @@
   let current = $state(untrack(() => data.initial));
   let copied = $state(false);
   let helpOpen = $state(false);
+  let showMap = $state(false);
+
+  onMount(() => {
+    showMap = true;
+  });
+
+  const TITLE = "Cape Cellular Referral Codes: $20/mo Off | cape.rip";
+  const DESCRIPTION =
+    "Free Cape Cellular referral codes, updated live. Enter one at signup for $20/mo off, and stack four to bring your plan to $0. No signup needed.";
+  const SOCIAL_DESCRIPTION =
+    "A live pool of Cape Cellular referral codes. Take $20/mo off at signup, stack four and pay $0. Plus speed tests, carrier comparisons, and live status.";
   let reporting = $state(false);
   let rolling = $state(false);
   let errorMessage: string | null = $state(null);
@@ -135,11 +148,29 @@
       submitting = false;
     }
   }
-
-  function citySlug(city: string, state: string): string {
-    return `${city.toLowerCase().replace(/\s+/g, "-")}-${state.toLowerCase()}`;
-  }
 </script>
+
+<svelte:head>
+  <title>{TITLE}</title>
+  <meta name="description" content={DESCRIPTION} />
+  <link rel="canonical" href="https://cape.rip/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://cape.rip/" />
+  <meta property="og:title" content={TITLE} />
+  <meta property="og:description" content={SOCIAL_DESCRIPTION} />
+  {@html `<script type="application/ld+json">${JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "@id": "https://cape.rip/#webpage",
+    url: "https://cape.rip/",
+    name: TITLE,
+    description: DESCRIPTION,
+    inLanguage: "en-US",
+    isPartOf: { "@id": "https://cape.rip/#site" },
+    publisher: { "@id": "https://cape.rip/#org" },
+    ...(data.poolUpdatedAt ? { dateModified: data.poolUpdatedAt } : {}),
+  })}</script>`}
+</svelte:head>
 
 <main class="min-h-screen flex flex-col">
   <section class="max-w-6xl mx-auto w-full px-6 pt-10 pb-8">
@@ -149,10 +180,10 @@
       >
         <div class="mb-6 flex items-baseline justify-between gap-4">
           <div class="min-w-0">
-            <p
-              class="text-xs uppercase mb-3 tracking-[0.2em] text-white/40 flex items-center gap-1.5"
+            <h1
+              class="text-xs uppercase mb-3 tracking-[0.2em] text-white/55 flex items-center gap-1.5"
             >
-              Cape referral code
+              Cape Cellular referral codes
               <button
                 type="button"
                 onclick={() => (helpOpen = !helpOpen)}
@@ -162,15 +193,18 @@
               >
                 <CircleHelp class="w-3.5 h-3.5" />
               </button>
-            </p>
+            </h1>
             <p class="text-sm text-white/50">
               Enter this at signup for <span class="text-white font-medium"
                 >$20/mo off</span
               >
             </p>
+            <p class="text-xs text-white/50 mt-1.5">
+              Every code here was submitted in the last 7 days.
+            </p>
           </div>
           {#if data.poolAvailable}
-            <p class="text-xs text-white/30 flex items-center gap-1.5 shrink-0">
+            <p class="text-xs text-white/50 flex items-center gap-1.5 shrink-0">
               <span class="inline-block w-1.5 h-1.5 bg-emerald-400"></span>
               {data.activeCount} in pool
             </p>
@@ -191,6 +225,12 @@
               code plays by the same rules, and all of them drop out of the pool
               after a week to keep the list fresh.
             </p>
+            <a
+              href="/referral-codes"
+              class="mt-2 inline-block text-lavender hover:text-lavender-bright transition-colors"
+            >
+              How Cape referral codes work &rarr;
+            </a>
           </div>
         {/if}
 
@@ -240,7 +280,7 @@
             <button
               type="button"
               onclick={openModal}
-              class="text-xs text-white/30 hover:text-white/60 transition-colors"
+              class="text-xs text-white/50 hover:text-white/60 transition-colors"
             >
               Already a Cape subscriber?
               <span class="underline">
@@ -279,7 +319,7 @@
       </div>
 
       <div class="lg:w-2/5 bg-card rounded-md p-5 flex flex-col">
-        <h2 class="text-xs uppercase tracking-[0.2em] text-white/40">
+        <h2 class="text-xs uppercase tracking-[0.2em] text-white/55">
           Coverage
         </h2>
         <p class="text-sm text-white/60 mt-3 leading-relaxed">
@@ -311,7 +351,7 @@
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
       <div class="bg-card rounded-md p-6 md:col-span-2 min-w-0">
         <div class="flex items-baseline justify-between gap-4 mb-4">
-          <h2 class="text-xs uppercase tracking-[0.2em] text-white/40">
+          <h2 class="text-xs uppercase tracking-[0.2em] text-white/55">
             Cape speed reports
           </h2>
           <a
@@ -323,8 +363,13 @@
         </div>
         {#if data.speedCities.length > 0}
           <div class="flex flex-col sm:flex-row gap-5 items-center">
-            <div class="w-full sm:w-1/2 shrink-0">
-              <SpeedMap cities={data.speedCities} />
+            <div
+              class="w-full sm:w-1/2 shrink-0"
+              style="aspect-ratio: 960 / 600"
+            >
+              {#if showMap}
+                <SpeedMap cities={data.speedCities} />
+              {/if}
             </div>
             <div class="w-full sm:flex-1 min-w-0">
               {#each data.speedCities.slice(0, 6) as c (c.city + c.state)}
@@ -352,7 +397,7 @@
 
       <div class="bg-card rounded-md p-6 flex flex-col justify-between">
         <div>
-          <h2 class="text-xs uppercase tracking-[0.2em] text-white/40 mb-4">
+          <h2 class="text-xs uppercase tracking-[0.2em] text-white/55 mb-4">
             Cape plan comparison
           </h2>
           <p class="text-sm text-white/60 leading-relaxed">
@@ -378,7 +423,7 @@
     class="max-w-6xl mx-auto w-full px-6 pt-8 pb-12 grid gap-4 sm:grid-cols-2"
   >
     <div class="border border-white/8 rounded-md p-5">
-      <h2 class="text-xs uppercase tracking-[0.2em] text-white/40 mb-3">
+      <h2 class="text-xs uppercase tracking-[0.2em] text-white/55 mb-3">
         What is Cape Cellular?
       </h2>
       <p class="text-sm text-white/50 leading-relaxed">
@@ -395,7 +440,7 @@
       </a>
     </div>
     <div class="border border-white/8 rounded-md p-5">
-      <h2 class="text-xs uppercase tracking-[0.2em] text-white/40 mb-3">
+      <h2 class="text-xs uppercase tracking-[0.2em] text-white/55 mb-3">
         About cape.rip
       </h2>
       <p class="text-sm text-white/50 leading-relaxed">

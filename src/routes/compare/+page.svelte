@@ -237,7 +237,7 @@
 
   <section class="max-w-6xl mx-auto w-full px-6 pb-8">
     <div class="bg-card border border-lavender/15 rounded-md p-5 sm:p-6">
-      <h2 class="text-xs uppercase tracking-[0.2em] text-white/40 mb-6">
+      <h2 class="text-xs uppercase tracking-[0.2em] text-white/55 mb-6">
         Savings calculator
       </h2>
 
@@ -321,7 +321,7 @@
       {/if}
 
       <div class="mt-8 bg-surface rounded p-6">
-        <p class="text-xs uppercase tracking-[0.2em] text-white/40 mb-3">
+        <p class="text-xs uppercase tracking-[0.2em] text-white/55 mb-3">
           Cape vs {carrierName}
         </p>
         <div class="space-y-3">
@@ -423,7 +423,7 @@
   </section>
 
   <section class="max-w-6xl mx-auto w-full px-6 pb-8">
-    <h2 class="text-xs uppercase tracking-[0.2em] text-white/40 mb-4">
+    <h2 class="text-xs uppercase tracking-[0.2em] text-white/55 mb-4">
       Feature comparison
     </h2>
     <div class="bg-card rounded-md overflow-x-auto">
@@ -492,7 +492,7 @@
         </tbody>
       </table>
     </div>
-    <p class="text-xs text-white/30 mt-2">
+    <p class="text-xs text-white/50 mt-2">
       Select a different carrier above to update the comparison.
       {#if selectedCarrier && !selectedCarrier.taxesIncluded}
         <span class="text-white/40"
@@ -504,7 +504,7 @@
   </section>
 
   <section class="max-w-6xl mx-auto w-full px-6 pb-8">
-    <h2 class="text-xs uppercase tracking-[0.2em] text-white/40 mb-4">
+    <h2 class="text-xs uppercase tracking-[0.2em] text-white/55 mb-4">
       What no other carrier offers
     </h2>
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -577,7 +577,7 @@
 
   <section class="max-w-6xl mx-auto w-full px-6 pb-8">
     <div class="bg-card rounded-md p-5 sm:p-6">
-      <h2 class="text-xs uppercase tracking-[0.2em] text-white/40 mb-2">
+      <h2 class="text-xs uppercase tracking-[0.2em] text-white/55 mb-2">
         Referral program
       </h2>
       <p class="text-sm text-white/60 mb-2">
@@ -642,7 +642,7 @@
           </div>
         {/each}
       </div>
-      <p class="text-xs text-white/30 mt-4 text-center">
+      <p class="text-xs text-white/50 mt-4 text-center">
         If a referral cancels their account, that $20 credit ends on your next
         billing cycle and the slot opens up for a new one.
       </p>
@@ -650,7 +650,7 @@
   </section>
 
   <section class="max-w-6xl mx-auto w-full px-6 pb-8">
-    <h2 class="text-xs uppercase tracking-[0.2em] text-white/40 mb-4">
+    <h2 class="text-xs uppercase tracking-[0.2em] text-white/55 mb-4">
       All carrier comparisons
     </h2>
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -695,7 +695,7 @@
     <div
       class="bg-lavender/4 border border-lavender/15 rounded-md p-5 sm:p-6 text-center"
     >
-      <p class="text-xs uppercase tracking-[0.2em] text-white/40 mb-3">
+      <p class="text-xs uppercase tracking-[0.2em] text-white/55 mb-3">
         Ready to switch?
       </p>
       <p class="text-sm text-white/60 leading-relaxed max-w-2xl mx-auto">

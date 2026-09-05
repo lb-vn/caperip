@@ -58,7 +58,10 @@ export function startStatusRefresh(): void {
 function refresh(): Promise<StatusData> {
   if (inflight) return inflight;
   inflight = (async () => {
-    const data = await buildStatus();
+    const data = {
+      ...(await buildStatus()),
+      checkedAt: new Date().toISOString(),
+    };
     snapshot = data;
     return data;
   })()
@@ -95,6 +98,7 @@ const EMPTY: StatusData = {
   incidents: [],
   historyAvailable: false,
   incidentsCapped: false,
+  checkedAt: null,
 };
 
 async function buildStatus(): Promise<StatusData> {
@@ -176,6 +180,7 @@ async function buildStatus(): Promise<StatusData> {
       : "unknown";
 
   return {
+    checkedAt: null,
     pageUrl: EMPTY.pageUrl,
     historyUrl: EMPTY.historyUrl,
     overall: {
