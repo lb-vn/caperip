@@ -49,7 +49,7 @@ Speed tests need the Cloudflare Worker in `worker/`, so they are hidden unless `
 
 ## Privacy
 
-No accounts, no analytics, no third-party trackers. IP addresses are only ever stored as an HMAC-SHA256 hash, used for rate limiting and de-duplication. Codes and rate-limit events are deleted after 7 days.
+No accounts, no analytics, no third-party trackers. IP addresses are only ever stored as an HMAC-SHA256 hash, used for rate limiting and de-duplication. Codes and rate-limit events are deleted after 7 days. Speed reports keep their hash for 30 days so duplicate and abuse checks still work, then it is cleared; the report itself is retained so the city averages stay accurate, but nothing in it points back to a submitter.
 
 ## License
 

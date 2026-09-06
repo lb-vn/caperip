@@ -33,7 +33,9 @@ referrals, and your plan is completely free."
 - Speed tests measure against a Cloudflare Worker that only responds on Cape's
   network, and the results are signed server-side so they can't be faked.
 - No signup, no login, no analytics. IP addresses are only ever stored as an
-  HMAC-SHA256 hash. Codes and rate-limit events are deleted after 7 days.
+  HMAC-SHA256 hash. Codes and rate-limit events are deleted after 7 days, and
+  the hash attached to a speed report is cleared after 30 days. Speed reports
+  themselves are kept, with no identifier attached once that window passes.
 
 ## Network
 

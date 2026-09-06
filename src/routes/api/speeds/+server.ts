@@ -102,7 +102,6 @@ export const POST: RequestHandler = async (event) => {
   if (recent[0].count > 0) throw error(429, "one speed report per hour");
 
   await db.insert(speedReports).values({
-    zip,
     city: titleCase(city),
     state,
     downMbps,

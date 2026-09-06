@@ -1,6 +1,7 @@
 <script lang="ts">
   import { Sunrise, Sun, Sunset, Moon } from "@lucide/svelte";
   import { citySlug } from "$lib/slug";
+  import { RECENT_WINDOW_MONTHS } from "$lib/constants";
   import type { PageData } from "./$types";
 
   let { data }: { data: PageData } = $props();
@@ -39,12 +40,23 @@
     night: Moon,
   };
 
+  const single = $derived(data.stats.count === 1);
+
+  const sampleLine = $derived(
+    data.stats.windowed
+      ? `Across ${data.stats.recentCount} community speed tests in ${place} from the last ${RECENT_WINDOW_MONTHS} months, Cape averages`
+      : `Across ${data.stats.count} community speed tests in ${place}, Cape averages`,
+  );
+
   const summary = $derived(
-    data.stats.count === 1
+    single
       ? `One community speed test in ${place} recorded ${data.stats.avgDown} Mbps down, ${data.stats.avgUp} Mbps up and ${data.stats.avgPing} ms ping. A single result is not a citywide average.`
-      : `Across ${data.stats.count} community speed tests in ${place}, Cape averages ${data.stats.avgDown} Mbps down, ${data.stats.avgUp} Mbps up and ${data.stats.avgPing} ms ping.` +
+      : `${sampleLine} ${data.stats.avgDown} Mbps down, ${data.stats.avgUp} Mbps up and ${data.stats.avgPing} ms ping.` +
           (fastest
             ? ` ${timeLabels[fastest.timeBucket]} is the fastest window at ${fastest.avgDown} Mbps.`
+            : "") +
+          (data.stats.windowed && data.stats.count > data.stats.recentCount
+            ? ` ${data.stats.count} reports have been submitted in total.`
             : "") +
           (data.indexable
             ? ""
@@ -256,7 +268,7 @@
   </header>
 
   <div class="grid grid-cols-3 gap-3 sm:gap-4 mb-10">
-    {#each [["avg download Mbps", data.stats.avgDown], ["avg upload Mbps", data.stats.avgUp], ["avg ping ms", data.stats.avgPing]] as [label, value]}
+    {#each [[`${single ? "" : "avg "}download Mbps`, data.stats.avgDown], [`${single ? "" : "avg "}upload Mbps`, data.stats.avgUp], [`${single ? "" : "avg "}ping ms`, data.stats.avgPing]] as [label, value]}
       <div
         class="bg-card border border-lavender/15 rounded-md p-4 sm:p-6 text-center"
       >

@@ -72,7 +72,6 @@ export const speedReports = pgTable(
   "speed_reports",
   {
     id: serial("id").primaryKey(),
-    zip: varchar("zip", { length: 10 }).notNull(),
     city: varchar("city", { length: 100 }).notNull(),
     state: varchar("state", { length: 2 }).notNull(),
     downMbps: real("down_mbps").notNull(),
@@ -86,11 +85,10 @@ export const speedReports = pgTable(
     createdAt: timestamp("created_at", { withTimezone: true })
       .notNull()
       .defaultNow(),
-    fingerprint: text("fingerprint").notNull(), // IP hash
+    fingerprint: text("fingerprint"), // IP hash
     status: text("status").notNull().default("active"),
   },
   (t) => ({
-    zipIdx: index("speed_reports_zip_idx").on(t.zip),
     cityStateIdx: index("speed_reports_city_state_idx").on(t.city, t.state),
     statusIdx: index("speed_reports_status_idx").on(t.status),
   }),

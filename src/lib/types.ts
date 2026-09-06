@@ -52,6 +52,8 @@ export interface CityStats {
   city: string;
   state: string;
   count: number;
+  recentCount: number;
+  windowed: boolean;
   avgDown: number;
   avgUp: number;
   avgPing: number;
