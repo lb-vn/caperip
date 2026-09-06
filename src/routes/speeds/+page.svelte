@@ -315,7 +315,19 @@
       {:else}
         <div class="flex flex-col gap-4">
           {#if siteKey}
-            <div bind:this={turnstileEl}></div>
+            <div class="relative min-h-16.25">
+              <div bind:this={turnstileEl}></div>
+              {#if !turnstile.rendered}
+                <div
+                  class="absolute inset-0 flex items-center gap-2 text-xs text-white/50"
+                >
+                  <span
+                    class="inline-block w-3 h-3 rounded-full border border-white/25 border-t-white/70 spin"
+                  ></span>
+                  Loading verification&hellip;
+                </div>
+              {/if}
+            </div>
           {/if}
           {#if saveError}
             <p class="text-sm text-red-300">{saveError}</p>
@@ -336,7 +348,13 @@
             >
               Run again
             </button>
-            <span class="text-xs text-white/40">One report per hour.</span>
+            <span class="text-xs text-white/50">
+              {#if !turnstile.canSubmit}
+                Waiting for verification&hellip;
+              {:else}
+                One report per hour.
+              {/if}
+            </span>
           </div>
         </div>
       {/if}

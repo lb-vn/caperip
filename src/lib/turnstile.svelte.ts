@@ -7,6 +7,7 @@ export function useTurnstile(
   let token = $state<string | null>(null);
   let widgetId: string | null = null;
   let ready = $state(false);
+  let rendered = $state(false);
 
   function loadScript() {
     if (!siteKey) return;
@@ -40,6 +41,7 @@ export function useTurnstile(
     if (!siteKey || !el || !ready || !window.turnstile) return;
     if (widgetId) return;
 
+    rendered = true;
     widgetId = window.turnstile.render(el, {
       sitekey: siteKey,
       theme: "dark",
@@ -68,6 +70,7 @@ export function useTurnstile(
       window.turnstile.remove(widgetId);
       widgetId = null;
     }
+    rendered = false;
     token = null;
   }
 
@@ -82,6 +85,9 @@ export function useTurnstile(
     },
     get ready() {
       return ready;
+    },
+    get rendered() {
+      return !siteKey || rendered;
     },
     get canSubmit() {
       return !siteKey || !!token;

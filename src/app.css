@@ -43,8 +43,19 @@ button {
   animation: fadeIn 200ms ease-out;
 }
 
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.spin {
+  animation: spin 700ms linear infinite;
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .fade-in {
+  .fade-in,
+  .spin {
     animation: none;
   }
 }

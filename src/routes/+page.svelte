@@ -527,7 +527,19 @@
           </label>
 
           {#if siteKey}
-            <div bind:this={turnstileEl}></div>
+            <div class="relative min-h-16.25">
+              <div bind:this={turnstileEl}></div>
+              {#if !turnstile.rendered}
+                <div
+                  class="absolute inset-0 flex items-center gap-2 text-xs text-white/50"
+                >
+                  <span
+                    class="inline-block w-3 h-3 rounded-full border border-white/25 border-t-white/70 spin"
+                  ></span>
+                  Loading verification&hellip;
+                </div>
+              {/if}
+            </div>
           {:else}
             <p class="text-xs text-white/40">
               Captcha not configured (dev mode).
@@ -545,6 +557,11 @@
           >
             {submitting ? "Submitting…" : "Submit"}
           </button>
+          {#if !turnstile.canSubmit}
+            <p class="text-xs text-white/50 text-center">
+              Waiting for verification&hellip;
+            </p>
+          {/if}
 
           <p class="text-xs text-white/40 text-center">
             One submission per network per day. We hash your IP and never store
