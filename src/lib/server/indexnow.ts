@@ -17,7 +17,6 @@ export function submitUrls(paths: string[]): void {
     body: JSON.stringify({
       host: new URL(ORIGIN).host,
       key,
-      keyLocation: `${ORIGIN}/indexnow.txt`,
       urlList: paths.map((p) => `${ORIGIN}${p}`),
     }),
   }).catch((err) => console.error("[indexnow]", err));

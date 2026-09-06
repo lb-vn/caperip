@@ -3,7 +3,13 @@
     "name": "Cape",
     "slug": "cape",
     "provider": "Cape Cellular",
-    "pricePerLine": [70, 70, 70, 70, 70],
+    "pricePerLine": [
+      70,
+      70,
+      70,
+      70,
+      70
+    ],
     "taxesIncluded": true,
     "features": [
       "IMSI rotation",
@@ -14,6 +20,10 @@
       "50+ country roaming"
     ],
     "network": "T-Mobile and AT&T",
+    "networks": [
+      "T-Mobile",
+      "AT&T"
+    ],
     "dataNote": "Unlimited (may slow after 50GB)",
     "source": "https://cape.co"
   },
@@ -21,10 +31,23 @@
     "name": "AT&T Value Plus",
     "slug": "att",
     "provider": "AT&T",
-    "pricePerLine": [50, 45, 35, 30, 30],
+    "pricePerLine": [
+      50,
+      45,
+      35,
+      30,
+      30
+    ],
     "taxesIncluded": false,
-    "features": ["5GB priority data", "3GB hotspot", "Nationwide 5G"],
+    "features": [
+      "5GB priority data",
+      "3GB hotspot",
+      "Nationwide 5G"
+    ],
     "network": "AT&T",
+    "networks": [
+      "AT&T"
+    ],
     "dataNote": "Unlimited (5GB priority, then deprioritized)",
     "source": "https://www.att.com/plans/wireless/"
   },
@@ -32,10 +55,22 @@
     "name": "T-Mobile Essentials",
     "slug": "tmobile",
     "provider": "T-Mobile",
-    "pricePerLine": [65, 50, 40, 35, 32],
+    "pricePerLine": [
+      65,
+      50,
+      40,
+      35,
+      32
+    ],
     "taxesIncluded": false,
-    "features": ["50GB premium data", "Nationwide 5G"],
+    "features": [
+      "50GB premium data",
+      "Nationwide 5G"
+    ],
     "network": "T-Mobile",
+    "networks": [
+      "T-Mobile"
+    ],
     "dataNote": "50GB before deprioritization",
     "source": "https://www.t-mobile.com/cell-phone-plans"
   },
@@ -43,10 +78,23 @@
     "name": "Verizon Unlimited Plus",
     "slug": "verizon",
     "provider": "Verizon",
-    "pricePerLine": [80, 70, 55, 45, 45],
+    "pricePerLine": [
+      80,
+      70,
+      55,
+      45,
+      45
+    ],
     "taxesIncluded": false,
-    "features": ["30GB hotspot", "5G Ultra Wideband", "3-year price lock"],
+    "features": [
+      "30GB hotspot",
+      "5G Ultra Wideband",
+      "3-year price lock"
+    ],
     "network": "Verizon",
+    "networks": [
+      "Verizon"
+    ],
     "dataNote": "Unlimited premium data",
     "source": "https://www.verizon.com/plans/unlimited/"
   },
@@ -54,7 +102,13 @@
     "name": "US Mobile Premium",
     "slug": "usmobile",
     "provider": "US Mobile",
-    "pricePerLine": [33, 33, 33, 33, 33],
+    "pricePerLine": [
+      33,
+      33,
+      33,
+      33,
+      33
+    ],
     "taxesIncluded": false,
     "features": [
       "Unlimited priority data",
@@ -62,6 +116,11 @@
       "20GB international data"
     ],
     "network": "T-Mobile / Verizon / AT&T",
+    "networks": [
+      "T-Mobile",
+      "Verizon",
+      "AT&T"
+    ],
     "dataNote": "Unlimited priority data",
     "source": "https://www.usmobile.com/plans"
   },
@@ -69,10 +128,22 @@
     "name": "Mint Mobile Unlimited",
     "slug": "mint",
     "provider": "Mint Mobile",
-    "pricePerLine": [30, 30, 30, 30, 30],
+    "pricePerLine": [
+      30,
+      30,
+      30,
+      30,
+      30
+    ],
     "taxesIncluded": false,
-    "features": ["20GB hotspot", "Free calls to Canada & Mexico"],
+    "features": [
+      "20GB hotspot",
+      "Free calls to Canada & Mexico"
+    ],
     "network": "T-Mobile",
+    "networks": [
+      "T-Mobile"
+    ],
     "dataNote": "Unlimited (may slow after 35GB)",
     "source": "https://www.mintmobile.com"
   },
@@ -80,13 +151,22 @@
     "name": "Visible+",
     "slug": "visible",
     "provider": "Visible",
-    "pricePerLine": [35, 35, 35, 35, 35],
+    "pricePerLine": [
+      35,
+      35,
+      35,
+      35,
+      35
+    ],
     "taxesIncluded": true,
     "features": [
       "Unlimited premium data",
       "International coverage in 140+ countries"
     ],
     "network": "Verizon",
+    "networks": [
+      "Verizon"
+    ],
     "dataNote": "Unlimited premium data on 5G Ultra Wideband",
     "source": "https://www.visible.com"
   },
@@ -94,7 +174,13 @@
     "name": "Google Fi Unlimited Premium",
     "slug": "googlefi",
     "provider": "Google Fi",
-    "pricePerLine": [65, 55, 45, 40, 40],
+    "pricePerLine": [
+      65,
+      55,
+      45,
+      40,
+      40
+    ],
     "taxesIncluded": true,
     "features": [
       "100GB high-speed data",
@@ -102,6 +188,9 @@
       "International data in 200+ countries"
     ],
     "network": "T-Mobile",
+    "networks": [
+      "T-Mobile"
+    ],
     "dataNote": "100GB before throttle",
     "source": "https://fi.google.com/about/plans"
   }

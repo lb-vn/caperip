@@ -307,7 +307,7 @@
           Who is behind it
         </h2>
         <dl class="space-y-3 text-sm">
-          {#each [["CEO", "John Doyle"], ["Funding", "$191M total, most recently a $100M Series C at a $900M valuation"], ["Investors", "Bain Capital Ventures, IVP, A16Z, Costanoa, Point72"], ["Launched", "Exited beta January 2026, partnered with Proton at launch"], ["Donates to", "The EFF, GrapheneOS ($100,000 over the next year), and Privacy Guides"]] as [term, def]}
+          {#each [["CEO", "John Doyle"], ["Funding", "$191M total, most recently a $100M Series C at a $900M valuation"], ["Investors", "Bain Capital Ventures, IVP, A16Z, Costanoa, Point72"], ["Launched", "Exited beta January 2026, partnered with Proton at launch"], ["Donates to", "The EFF, GrapheneOS, and Privacy Guides"]] as [term, def]}
             <div>
               <dt class="text-xs uppercase tracking-wider text-white/35">
                 {term}
@@ -393,8 +393,8 @@
           rel="noopener noreferrer"
           class="text-lavender hover:text-lavender-bright transition-colors"
           >public on GitHub</a
-        >, including how codes are pooled, weighted, and expired. Corrections and bug reports
-        go to
+        >, including how codes are pooled, weighted, and expired. Corrections
+        and bug reports go to
         <a
           href="https://github.com/lb-vn/caperip/issues"
           target="_blank"

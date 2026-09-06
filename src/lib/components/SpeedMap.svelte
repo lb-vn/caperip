@@ -13,7 +13,7 @@
   const bins = $derived.by(() => {
     const map = new Map<
       string,
-      { x: number; y: number; count: number; label: string }
+      { x: number; y: number; count: number; cities: number; label: string }
     >();
     for (const c of cities) {
       if (c.lat == null || c.lng == null) continue;
@@ -29,14 +29,18 @@
 
       const key = `${col},${row}`;
       const hit = map.get(key);
-      if (hit) hit.count += c.count;
-      else
+      if (hit) {
+        hit.count += c.count;
+        hit.cities += 1;
+      } else {
         map.set(key, {
           x: col * STEP,
           y: row * STEP,
           count: c.count,
+          cities: 1,
           label: `${c.city}, ${c.state}`,
         });
+      }
     }
     return [...map.values()];
   });
@@ -75,7 +79,7 @@
         style="--op: {intensity(bin.count)}"
       >
         <title
-          >{bin.label}: {bin.count}
+          >{bin.label}{bin.cities > 1 ? ` and ${bin.cities - 1} nearby` : ""}: {bin.count}
           {bin.count === 1 ? "report" : "reports"}</title
         >
       </rect>

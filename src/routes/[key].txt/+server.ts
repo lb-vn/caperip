@@ -2,9 +2,9 @@ import { error } from "@sveltejs/kit";
 import type { RequestHandler } from "./$types";
 import { indexNowKey } from "$lib/server/indexnow";
 
-export const GET: RequestHandler = () => {
+export const GET: RequestHandler = ({ params }) => {
   const key = indexNowKey();
-  if (!key) throw error(404, "Not found");
+  if (!key || params.key !== key) throw error(404, "Not found");
 
   return new Response(key, {
     headers: {

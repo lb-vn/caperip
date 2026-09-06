@@ -5,7 +5,7 @@ import { startStatusRefresh } from "$lib/server/status";
 
 let ready: Promise<void> | null = null;
 
-const CACHEABLE = /^\/(about|referral-codes|compare|speeds\/.)/;
+const CACHEABLE = /^\/(about|referral-codes|compare|speeds)/;
 
 async function boot(): Promise<void> {
   await bootstrapSchema();

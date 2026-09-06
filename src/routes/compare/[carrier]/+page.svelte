@@ -36,6 +36,12 @@
   const carrierScalesWithLines = $derived(
     data.carrier.pricePerLine[4] < data.carrier.pricePerLine[0],
   );
+  const exclusiveNetworks = $derived(
+    data.carrier.networks.filter((n) => !data.cape.networks.includes(n)),
+  );
+  const sharedNetworks = $derived(
+    data.carrier.networks.filter((n) => data.cape.networks.includes(n)),
+  );
 
   function planSchema(plan: Plan) {
     return {
@@ -418,6 +424,14 @@
               cost is above ${data.carrier.pricePerLine[0]}.
             </li>
           {/if}
+          {#if sharedNetworks.length > 0}
+            <li>
+              Coverage is not the tradeoff here. Cape rides {sharedNetworks.join(
+                " and ",
+              )}, the same {sharedNetworks.length > 1 ? "networks" : "network"}
+              {data.carrier.name} runs on, so signal where you live should be comparable.
+            </li>
+          {/if}
           <li>
             You can find {monthlyDiff > 0 ? "a few" : "any"} referrals. Each one takes
             $20/month off for both parties, up to five, and four covers Cape's $70
@@ -446,10 +460,14 @@
           {#if carrierOnly.length > 0}
             <li>You specifically need {carrierOnly.slice(0, 3).join(", ")}.</li>
           {/if}
-          <li>
-            {data.carrier.network} coverage is materially better where you actually
-            live, which is worth checking before any privacy feature.
-          </li>
+          {#if exclusiveNetworks.length > 0}
+            <li>
+              You need {exclusiveNetworks.join(" or ")} specifically. Cape leases
+              only
+              {data.cape.networks.join(" and ")}, so a {exclusiveNetworks[0]}-only
+              area is the one place it cannot follow you.
+            </li>
+          {/if}
         </ul>
       </div>
     </div>

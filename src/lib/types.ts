@@ -68,6 +68,7 @@ export interface Plan {
   taxesIncluded: boolean;
   features: string[];
   network: string;
+  networks: string[];
   dataNote: string;
   source: string;
 }

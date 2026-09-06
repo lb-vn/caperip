@@ -62,6 +62,7 @@
         url: canonical,
         isPartOf: { "@id": "https://cape.rip/#site" },
         creator: { "@id": "https://cape.rip/#org" },
+        license: "https://creativecommons.org/licenses/by/4.0/",
         spatialCoverage: {
           "@type": "Place",
           address: {
@@ -235,8 +236,6 @@
   <meta property="og:url" content={canonical} />
   {#if data.indexable}
     {@html `<script type="application/ld+json">${JSON.stringify(schema)}</script>`}
-  {:else}
-    <meta name="robots" content="noindex, follow" />
   {/if}
 </svelte:head>
 

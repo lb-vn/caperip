@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { page } from "$app/stores";
   import "../app.css";
   import Nav from "$lib/components/Nav.svelte";
   import type { Snippet } from "svelte";
@@ -16,6 +17,15 @@
     unknown: "bg-white/30",
   };
 </script>
+
+<svelte:head>
+  <meta
+    name="robots"
+    content="{$page.data.indexable === false
+      ? 'noindex, follow'
+      : 'index, follow'}, max-image-preview:large"
+  />
+</svelte:head>
 
 <Nav />
 {@render children()}
